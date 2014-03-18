@@ -27,4 +27,4 @@ return array(
     'regex' => 'validation.regex',
     'url' => 'validation.url',
 );
-?>
+
