@@ -11,7 +11,10 @@ defined('SYSPATH') or die('No direct script access.');
  */
 class Kohana_Notification {
 
-    const INFO = 'info', WARNING = 'warning', ERROR = 'error', SUCCESS = 'success';
+    /**
+     * These constants match the Bootstrap framework.
+     */
+    const INFO = 'info', WARNING = 'warning', DANGER = 'danger', SUCCESS = 'success';
 
     /**
      * Key used in Session for storing notifications.
@@ -43,31 +46,19 @@ class Kohana_Notification {
 
     protected function __construct() {
 
-        $session = Session::instance()->get(Notification::$session_key, array('notifications' => array(), 'errors' => array()));
+        $session = &Session::instance()->as_array();
 
-        $this->errors = $session['errors'];
-        $this->notifications = $session['notifications'];
+        if (!isset($session['errors'])) {
+            $session['errors'] = array();
+        }
 
-        /**
-         * Remove old notifications, we assume it has already been dislayed
-         * since the singleton has been called.
-         */
-        Session::instance()->delete(Notification::$session_key);
+        if (!isset($session['notifications'])) {
+            $session['notifications'] = array();
+        }
+
+        $this->errors = &$session['errors'];
+        $this->notifications = &$session['notifications'];
     }
-
-    /**
-     * Captured errors.
-     * 
-     * @var type 
-     */
-    private $_errors = array();
-
-    /**
-     * Captured notifications.
-     * 
-     * @var type 
-     */
-    private $_notifications = array();
 
     /**
      * Errors for display (include those from session).
@@ -88,27 +79,29 @@ class Kohana_Notification {
      * 
      * @param string $level
      * @param string $message
-     * @param array  $values values used for substitution
+     * @param array  $values     values used for substitution
+     * @param array  $attributes attributes for the generated HTML
      */
-    public function add($level, $message, array $values = NULL) {
+    public function add($level, $message, array $values = NULL, array $attributes = NULL) {
 
-        // For this request
+        // add some useful HTML5 tags
+        $attributes['data-level'] = $level;
+
         $this->notifications[] = array(
             'level' => $level,
             'message' => __($message, $values),
+            'attributes' => $attributes
         );
+    }
 
-        // To be stored
-        $this->_notifications[] = array(
-            'level' => $level,
-            'message' => __($message, $values),
-        );
+    public function notifications() {
 
-        $session = Session::instance()->get(Notification::$session_key);
+        $notifications = $this->notifications;
 
-        $session['notifications'] = $this->_notifications;
+        // Clear when read
+        $this->notifications = array();
 
-        Session::instance()->set(Notification::$session_key, $session);
+        return $notifications;
     }
 
     /**
@@ -126,7 +119,17 @@ class Kohana_Notification {
      * @param string  $file file or directory to use for field name.
      * @param boolean $translate
      */
-    public function errors($errors, $file = NULL, $translate = TRUE) {
+    public function errors($errors = NULL, $file = NULL, $translate = TRUE) {
+
+        if ($errors === NULL) {
+
+            $errors = $this->errors;
+
+            // Clear when read
+            $this->errors = array();
+
+            return $errors;
+        }
 
         if ($errors instanceof Validation) {
             $errors = Arr::flatten($errors->errors($file, $translate));
@@ -142,15 +145,6 @@ class Kohana_Notification {
 
         // For this request
         $this->errors = Arr::merge($this->errors, $errors);
-
-        // To be stored
-        $this->_errors = Arr::merge($this->_errors, $errors);
-
-        $session = Session::instance()->get(Notification::$session_key);
-
-        $session['errors'] = $this->_errors;
-
-        Session::instance()->set(Notification::$session_key, $session);
     }
 
 }
