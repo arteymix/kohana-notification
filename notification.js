@@ -72,13 +72,15 @@ var Notification = {
     /**
      * Override this function to redefine error formatting.
      * 
+     * This methods appends error using Bootstrap.
+     * 
      * @param {type} field
      * @param {type} errors
      * @returns {undefined}
      */
     formatErrors: function(field, errors) {
 
-        // Resolve the field
+        // Resolve the field by priority
 
         // equals field
         var input = $("[name='" + field + "']");
@@ -97,16 +99,32 @@ var Notification = {
         if (input.size() === 0) {
             input = $("[name^='" + field + "']");
         }
-        
+
         // Remove error on blur
         input.blur(function() {
-            $(this).parents('.control-group').first().removeClass('error');
+            $(this).parents('.form-group').first().removeClass('error');
         });
 
-        var controlGroup = input.parents('.control-group').addClass('error');
+        var controlGroup = input.parents('.form-group').addClass('error');
+
+        errors = $.isArray(errors) ? errors : [errors];
 
         $.each(errors, function(index, message) {
-            controlGroup.append('<span class="help-inline">' + message.charAt(0).toUpperCase() + message.slice(1) + '.</span>');
+
+            if ($.isArray(message)) {
+
+                for (subField in message) {
+
+                    subField = (field === '_external') ? subField : field + '[' + subField + ']';
+
+                    Notification.formatErrors(subField, message[subField]);
+
+                }
+
+            } else {
+                controlGroup.append('<span class="help-inline">' + message.charAt(0).toUpperCase() + message.slice(1) + '.</span>');
+            }
+
         });
     }
 
