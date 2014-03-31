@@ -67,7 +67,7 @@ var Notification = {
                 .attr(notification.attributes)
                 .addClass('alert')
                 .addClass('alert-' + notification.level)
-                .text(notification.message);
+                .html(notification.message);
     },
     /**
      * Override this function to redefine error formatting.
