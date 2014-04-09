@@ -78,7 +78,7 @@ var Notification = {
      * @param {type} errors
      * @returns {undefined}
      */
-    formatErrors: function(field, errors) {
+    applyErrors: function(field, errors) {
 
         // Resolve the field by priority
 
@@ -100,12 +100,7 @@ var Notification = {
             input = $("[name^='" + field + "']");
         }
 
-        // Remove error on blur
-        input.blur(function() {
-            $(this).parents('.form-group').first().removeClass('error');
-        });
-
-        var controlGroup = input.parents('.form-group').addClass('error');
+        var controlGroup = input.parents('.form-group').first().addClass('text-danger');
 
         errors = $.isArray(errors) ? errors : [errors];
 
@@ -117,12 +112,13 @@ var Notification = {
 
                     subField = (field === '_external') ? subField : field + '[' + subField + ']';
 
-                    Notification.formatErrors(subField, message[subField]);
+                    Notification.applyErrors(subField, message[subField]);
 
                 }
 
             } else {
-                controlGroup.append('<span class="help-inline">' + message.charAt(0).toUpperCase() + message.slice(1) + '.</span>');
+
+                controlGroup.append($('<p/>').html(message));
             }
 
         });
@@ -137,7 +133,7 @@ var Notification = {
             $('#notifications').append(Notification.format(Notification.notifications[index]));
         }
 
-        $.each(Notification.errors, Notification.formatErrors);
+        $.each(Notification.errors, Notification.applyErrors);
 
     });
 })(window.jQuery);

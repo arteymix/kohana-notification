@@ -1,4 +1,7 @@
 <phpunit colors="true" verbose="true" bootstrap="../unittest/bootstrap.php">
+    <php>
+        <server name="KOHANA_ENV" value="TESTING"/>
+    </php>
     <testsuite name="Notifications general tests">
         <directory suffix='.php'>tests/</directory>  
     </testsuite>    

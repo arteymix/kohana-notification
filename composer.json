@@ -1,0 +1,24 @@
+{
+    "name": "kohana/notification",
+    "type": "kohana/module",
+    "description": "Notification and error on fields handling module for the Kohana framework",
+    "homepage": "http://github.com/arteymix/kohana-notification",
+    "license": "BSD-3-Clause",
+    "keywords": ["kohana", "framework", "notification", "error"],
+    "authors": [
+        {
+            "name": "Guillaume Poirier-Morency",
+            "email": "guillaumepoiriermorency@gmail.com",
+            "homepage": "https://github.com/arteymix",
+            "role": "developer"
+        }
+    ],
+    "support": {
+        "issues": "http://github.com/arteymix/kohana-notification/issues",
+        "source": "http://github.com/arteymix/kohana-notification"
+    },
+    "require": {
+        "kohana/core": ">=3.3",
+        "php": ">=5.3.3"
+    }
+}

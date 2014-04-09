@@ -19,10 +19,14 @@ class Notification_Test extends Unittest_TestCase {
 
         $this->assertCount(0, Notification::instance()->notifications);
 
-        Notification::instance()->add(Notification::ERROR, 'crap :toto', array(':toto' => 'crap'));
+        Notification::instance()->add(Notification::DANGER, 'crap :toto', array(':toto' => 'crap'));
 
         // There should be only one element
-        $this->assertCount(1, Notification::instance()->notifications());
+        $this->assertCount(1, Notification::instance()->notifications);
+
+        Notification::instance()->notifications(); // consume notifications
+
+        $this->assertCount(0, Notification::instance()->notifications);
     }
 
     /**
@@ -39,11 +43,15 @@ class Notification_Test extends Unittest_TestCase {
 
         $this->assertFalse($validation->check());
 
-        Notification::instance()->errors($validation);
+        Notification::instance()->errors($validation, 'validation');
 
         $this->assertCount(1, Notification::instance()->errors);
 
         $this->assertArrayHasKey('foo', Notification::instance()->errors);
+
+        Notification::instance()->errors(); // consume errors
+
+        $this->assertCount(0, Notification::instance()->errors);
     }
 
 }
