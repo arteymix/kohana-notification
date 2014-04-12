@@ -1,6 +1,6 @@
 {
-    "name": "kohana/notification",
-    "type": "kohana/module",
+    "name": "arteymix/notification",
+    "type": "kohana-module",
     "description": "Notification and error on fields handling module for the Kohana framework",
     "homepage": "http://github.com/arteymix/kohana-notification",
     "license": "BSD-3-Clause",
