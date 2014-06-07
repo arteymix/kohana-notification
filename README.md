@@ -3,6 +3,18 @@ kohana-notification
 
 Notification module for Kohana.
 
+Session is used to store the notifications and errors. If you would like to use a specific session key, you may set the ```Notification::$session_key``` variable in your ```bootstrap.php``` file.
+
+To fetch errors and notifications, you may either access their array or use the function named the same way.
+
+```php
+    $notifications = Notification::instance()->notifications;
+    
+    $notifications = Notification::instance()->notifications();
+```
+
+Using the function will clear the notification array. This is how you consume a notification.
+
 ## Usage
 
 Displaying simple message
