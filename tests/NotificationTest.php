@@ -10,12 +10,12 @@ defined('SYSPATH') or die('No direct script access.');
  * @author Guillaume Poirier-Morency <john.doe@example.com>
  * @copyright (c) 2012, Hète.ca Inc.
  */
-class Notification_Test extends Unittest_TestCase {
+class NotificationTest extends Unittest_TestCase {
 
     /**
-     * Test for adding notification
+     * Tests adding and consuming notifications.
      */
-    public function test_add_notification() {
+    public function testNotifications() {
 
         $this->assertCount(0, Notification::instance()->notifications);
 
@@ -30,9 +30,9 @@ class Notification_Test extends Unittest_TestCase {
     }
 
     /**
-     * Test for adding errors
+     * Test adding and consuming errors.
      */
-    public function test_add_error() {
+    public function testAddError() {
 
         $this->assertCount(0, Notification::instance()->errors());
 
