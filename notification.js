@@ -118,7 +118,7 @@ var Notification = {
 
             } else {
 
-                controlGroup.append($('<p/>').html(message));
+                controlGroup.append($('<p/>').html(message.charAt(0).toUpperCase() + message.slice(1) + '.'));
             }
 
         });
